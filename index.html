@@ -5,12 +5,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;600&display=swap" rel="stylesheet">
     <title>IRDb App</title>
 </head>
 
 <body>
-    <div>
+    <div class="body-content">
+        <header>
+            <div class="logo">
+                <img src="Images/IRDbLogo.png" alt="IRDbLogo">
+            </div>
+            <!-- Navigeringsmeny -->
+            <!-- Add som rullar ner större meny. -->
+            <div class="add-movie-container">
+                <h1>Add a new movie to the database.</h1>
+                <div>
+                    <form class="add-movie-grid" id="add-movie-form">
+                        <div>
+                            <label for="title-input">Title:</label><br />
+                            <label for="director-input">Director:</label><br />
+                            <label for="year-input">Year:</label><br />
+                        </div>
+                        <div>
+                            <input id="title-input" type="text" placeholder="Title" required /><br />
+                            <input id="director-input" type="text" placeholder="Director" /><br />
+                            <input id="year-input" type="text" placeholder="Year" />
+                        </div>
+                        <div>
+                            <label for="genre-input">Genre:</label><br />
+                            <label for="duration-input">Duration:</label><br />
+                            <label for="rating-input">Rating:</label><br />
+                        </div>
+                        <div>
+                            <input id="genre-input" type="text" placeholder="Genre" /><br />
+                            <input id="duration-input" type="text" placeholder="Duration" /><br />
+                            <input id="rating-input" type="text" placeholder="Rating" />
+                        </div>
+                    </form>
+                    <button id="add-movie-btn">Add Movie</button>
+                </div>
 
+            </div>
+        </header>
+        <section>
+            <div class="movie-container" id="movieContainer">
+                <!-- Filmer i min databas. -->
+            </div>
+        </section>
+
+        <footer>
+            <h4>© 2023 Copyright</h4>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">Linkedin</a></li>
+            </ul>
+        </footer>
     </div>
     <script src="main.js"></script>
 </body>
