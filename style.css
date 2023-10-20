@@ -39,6 +39,7 @@ header {
   margin-block-end: 0.5rem;
   white-space: nowrap;
 }
+
 .add-movie-grid {
   position: relative;
   display: grid;
@@ -55,6 +56,10 @@ header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  /* Borde haft ett grid här istället. 
+  Det hade löst problemet med att om det blir 
+  mindre än 3 kort på en rad så hamnar de 
+  efter varandra. */
   padding: 2rem;
 }
 .movie-card {
@@ -70,7 +75,9 @@ header {
   margin-block-start: 0;
   margin-block-end: 0.5rem;
 }
-
+.movie-card ul {
+  padding: 0;
+}
 .movie-card li {
   list-style: none;
 }

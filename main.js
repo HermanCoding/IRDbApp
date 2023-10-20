@@ -1,15 +1,13 @@
 // --- Selectors ---
-
 const titleInput = document.querySelector("#title-input");
 const directorInput = document.querySelector("#director-input");
-const yearInput = parseInt(document.querySelector("#year-input"));
+const yearInput = document.querySelector("#year-input");
 const genreInput = document.querySelector("#genre-input");
-const durationInput = parseInt(document.querySelector("#duration-input"));
-const ratingInput = parseFloat(document.querySelector("#rating-input"));
+const durationInput = document.querySelector("#duration-input");
+const ratingInput = document.querySelector("#rating-input");
 const addMovieBtn = document.querySelector("#add-movie-btn");
 
 // --- Event listeners ---
-
 addMovieBtn.addEventListener("click", addMovie);
 
 // --- GET ---
@@ -35,10 +33,10 @@ const displayMovies = (movies) => {
 
   movies.forEach((movie) => {
     const movieCard = createCardElement("div", "");
+    const ulElement = createCardElement("ul");
     movieCard.classList.add("movie-card");
 
-    const elementsToAdd = [
-      createCardElement("h3", movie.title),
+    const listElements = [
       createCardElement("li", `Directed by: ${movie.director}`),
       createCardElement("li", `Year: ${movie.year}`),
       createCardElement("li", `Genre: ${movie.genre}`),
@@ -46,28 +44,45 @@ const displayMovies = (movies) => {
       createCardElement("li", `Rating: ${movie.rating}`),
     ];
 
-    elementsToAdd.forEach((element) => movieCard.appendChild(element));
+    listElements.forEach((element) => ulElement.appendChild(element));
+
+    movieCard.appendChild(createCardElement("h3", movie.title));
+    movieCard.appendChild(ulElement);
+
     movieContainer.appendChild(movieCard);
   });
 };
+fetchAndDisplay();
 
-fetchData().then((movies) => {
-  displayMovies(movies);
-});
+function fetchAndDisplay() {
+  fetchData().then((movies) => {
+    clearMovieContainer();
+    displayMovies(movies);
+  });
+}
+
+function clearMovieContainer() {
+  const movieContainer = document.getElementById("movieContainer");
+  while (movieContainer.firstChild) {
+    movieContainer.removeChild(movieContainer.firstChild);
+  }
+}
 
 //  --- POST ---
-
 function addMovie() {
   const title = titleInput.value;
   const director = directorInput.value;
-  const year = yearInput.valueOf;
+  const year = yearInput.value ? parseInt(yearInput.value) : 0;
   const genre = genreInput.value;
-  const duration = durationInput.valueOf;
-  const rating = ratingInput.valueOf;
+  const duration = durationInput.value ? parseInt(durationInput.value) : 0;
+  const rating = ratingInput.value ? parseFloat(ratingInput.value) : 0;
 
   let newMovie;
-  // TODO: Check for empty string
-  if (!title || isNaN(year) || isNaN(duration) || isNaN(rating)) {
+  if (isNaN(year) || isNaN(duration) || isNaN(rating)) {
+    alert("Year, duration och rating måste vara nummer eller inget");
+    console.log(year, duration, rating);
+    return;
+  } else {
     newMovie = {
       title: title,
       director: director,
@@ -77,25 +92,28 @@ function addMovie() {
       rating: rating,
     };
   }
-  console.log(newMovie);
+
   fetch("https://localhost:7063/api/Movies/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newMovie),
-  })
-    .then((response) => {
-      // Handle the response, check if it was successful, etc.
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json;
-    })
-    .then((text) => {
-      // Do something with the data if needed
-      console.log(text);
-    });
+  }).then((response) => {
+    if (response.ok) {
+      alert(`The movie ${newMovie.title} has been added to the database.`);
+      document.getElementById("add-movie-form").reset();
+      fetchAndDisplay();
+      return;
+    }
+    return response.text().then((t) => displayErrors(JSON.parse(t)));
+  });
+}
 
-  document.getElementById("add-movie-form").reset();
+// Tänkte fixat detta för alla poster men det blev för stort.
+// Borde implementerat en riktig try catch med för att handskas
+// med fel men lever hellre i tron att min kod är felfri :P
+
+function displayErrors(t) {
+  alert(t.errors.Title);
 }
